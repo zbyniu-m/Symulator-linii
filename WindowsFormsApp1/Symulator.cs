@@ -13,6 +13,7 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using static SymulatroLinii.Model.DbSerwerSQLite;
 using System.Diagnostics;
+using Dapper;
 
 namespace WindowsFormsApp1
 {
@@ -192,21 +193,39 @@ namespace WindowsFormsApp1
 
         private void timer_Symulacja_Tick(object sender, EventArgs e)
         {
-            string connetionString = null;
+            
             SqlConnection cnn;
-            SqlCommand command;
-            string sql = null;            
-            connetionString = "Data Source=" + textBox_serwer_adres.Text + ";Initial Catalog="+ textBox_baza.Text +";User ID=" + textBox_serwer_login.Text + "; Password=" + textBox_serwer_haslo.Text;
-            sql = string.Format("INSERT INTO TEMP (Time_Stamp,L_Opakowan,Wydajnosc,L_OpAplikator,WydajnoscAplikator,FilTrybCIP,FilRezerwa1,FilRezerwa2,FilRezerwa3,FilSterylizacja,FilReadyProd,FilRun,FilRezerwa4,ErrorCode1,ErrorCode2,Nr_lini,Bias,Time_Stamp_ms,MaxWydajnosc) VALUES ({0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18})",
-                _dbTempTable.Time_Stamp, _dbTempTable.L_Opakowan, _dbTempTable.Wydajnosc, _dbTempTable.L_OpAplikator, _dbTempTable.WydajnoscAplikator, _dbTempTable.FilTrybCIP, _dbTempTable.FilRezerwa1, _dbTempTable.FilRezerwa2, _dbTempTable.FilRezerwa3, _dbTempTable.FilSterylizacja, _dbTempTable.FilReadyProd, _dbTempTable.FilRun, _dbTempTable.FilRezerwa4, _dbTempTable.ErrorCode1, _dbTempTable.ErrorCode2, _dbTempTable.Nr_lini,_dbTempTable.Bias, _dbTempTable.Time_Stamp_ms, _dbTempTable.MaxWydajnosc);
-            Debug.WriteLine(connetionString);
+            string connetionString = "Data Source=" + textBox_serwer_adres.Text + ";Initial Catalog="+ textBox_baza.Text +";User ID=" + textBox_serwer_login.Text + "; Password=" + textBox_serwer_haslo.Text;
+            string query = @"INSERT INTO temp (Time_Stamp,L_Opakowan,Wydajnosc,L_OpAplikator,WydajnoscAplikator,FilTrybCIP,FilRezerwa1,FilRezerwa2,FilRezerwa3,FilSterylizacja,FilReadyProd,FilRun,FilRezerwa4,ErrorCode1,ErrorCode2,Nr_lini,Bias,czy_przetworzony,Time_Stamp_ms) VALUES (@Time_Stamp,@L_Opakowan,@Wydajnosc,@L_OpAplikator,@WydajnoscAplikator,@FilTrybCIP,@FilRezerwa1,@FilRezerwa2,@FilRezerwa3,@FilSterylizacja,@FilReadyProd,@FilRun,@FilRezerwa4,@ErrorCode1,@ErrorCode2,@Nr_lini,@Bias,0,@Time_Stamp_ms)";
+                Debug.WriteLine(connetionString + " " + query);
+            var parameter = new DynamicParameters();
+            parameter.Add("@Time_Stamp", _dbTempTable.Time_Stamp);
+            parameter.Add("@L_Opakowan", _dbTempTable.L_Opakowan);
+            parameter.Add("@Wydajnosc", _dbTempTable.Wydajnosc);
+            parameter.Add("@L_OpAplikator", _dbTempTable.L_OpAplikator);
+            parameter.Add("@WydajnoscAplikator", _dbTempTable.WydajnoscAplikator);
+            parameter.Add("@FilTrybCIP", _dbTempTable.FilTrybCIP);
+            parameter.Add("@FilRezerwa1", _dbTempTable.FilRezerwa1);
+            parameter.Add("@FilRezerwa2", _dbTempTable.FilRezerwa2);
+            parameter.Add("@FilRezerwa3", _dbTempTable.FilRezerwa3);
+            parameter.Add("@FilSterylizacja", _dbTempTable.FilSterylizacja);
+            parameter.Add("@FilReadyProd", _dbTempTable.FilReadyProd);
+            parameter.Add("@FilRun", _dbTempTable.FilRun);
+            parameter.Add("@FilRezerwa4", _dbTempTable.FilRezerwa4);
+            parameter.Add("@ErrorCode1", _dbTempTable.ErrorCode1);
+            parameter.Add("@ErrorCode2", _dbTempTable.ErrorCode2);
+            parameter.Add("@Nr_lini", _dbTempTable.Nr_lini);
+            parameter.Add("@Bias", _dbTempTable.Bias);
+            parameter.Add("@Time_Stamp_ms", _dbTempTable.Time_Stamp_ms);
+
+
             cnn = new SqlConnection(connetionString);
             try
             {
                 cnn.Open();
-                command = new SqlCommand(sql, cnn);
-                command.ExecuteNonQuery();
-                Debug.WriteLine(sql + " " + connetionString);
+                cnn.Execute(query, parameter, commandType: System.Data.CommandType.Text);
+
+                Debug.WriteLine(query + " " + connetionString);
                 cnn.Close();
             }
             catch (Exception ex)

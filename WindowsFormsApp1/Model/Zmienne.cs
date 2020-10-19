@@ -30,7 +30,7 @@ namespace SymulatroLinii.Model
         public int FilRezerwa4 { get; set; } = 0;
         public int ErrorCode1 { get; set; } = 0;
         public int ErrorCode2 { get; set; } = 0;
-        public int Nr_lini { get; set; } = 0;
+        public int Nr_lini { get; set; } = 1410;
         public int MaxWydajnosc { get; set; } = 0;
         public int Time_Stamp_ms { get; set; } = 0;
         public int Bias { get; set; } = 0;
