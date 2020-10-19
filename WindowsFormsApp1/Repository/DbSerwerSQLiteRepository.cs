@@ -76,6 +76,7 @@ namespace SymulatroLinii.Repository
                         ObjFromDb.Login = entity.Login;
                         ObjFromDb.Adres = entity.Adres;
                         ObjFromDb.Haslo = entity.Haslo;
+                        ObjFromDb.Baza = entity.Baza;
                         db.SaveChanges();
                     }
                     else

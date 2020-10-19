@@ -32,12 +32,13 @@
             this.button_start_symulator = new System.Windows.Forms.Button();
             this.GBSymulacja = new System.Windows.Forms.GroupBox();
             this.checkBox_symulacja = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.button_stop_wydajnosc = new System.Windows.Forms.Button();
             this.button_start_wydajnosc = new System.Windows.Forms.Button();
             this.textBox_wydajnosc = new System.Windows.Forms.TextBox();
             this.hScrollBar_wydajnosc = new System.Windows.Forms.HScrollBar();
             this.groupBox_dane_serwera = new System.Windows.Forms.GroupBox();
+            this.textBox_baza = new System.Windows.Forms.TextBox();
+            this.label_Baza = new System.Windows.Forms.Label();
             this.button_serwer_usun = new System.Windows.Forms.Button();
             this.button_serwer_zapisz = new System.Windows.Forms.Button();
             this.label_haslo_serwer = new System.Windows.Forms.Label();
@@ -50,6 +51,7 @@
             this.textBox_serwer_adres = new System.Windows.Forms.TextBox();
             this.textBox_serwer_nazwa = new System.Windows.Forms.TextBox();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.timer_Symulacja = new System.Windows.Forms.Timer(this.components);
             this.GBSymulacja.SuspendLayout();
             this.groupBox_dane_serwera.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -68,7 +70,6 @@
             // GBSymulacja
             // 
             this.GBSymulacja.Controls.Add(this.checkBox_symulacja);
-            this.GBSymulacja.Controls.Add(this.button1);
             this.GBSymulacja.Controls.Add(this.button_stop_wydajnosc);
             this.GBSymulacja.Controls.Add(this.button_start_wydajnosc);
             this.GBSymulacja.Controls.Add(this.textBox_wydajnosc);
@@ -76,7 +77,7 @@
             this.GBSymulacja.Controls.Add(this.button_start_symulator);
             this.GBSymulacja.Location = new System.Drawing.Point(12, 12);
             this.GBSymulacja.Name = "GBSymulacja";
-            this.GBSymulacja.Size = new System.Drawing.Size(409, 426);
+            this.GBSymulacja.Size = new System.Drawing.Size(409, 357);
             this.GBSymulacja.TabIndex = 1;
             this.GBSymulacja.TabStop = false;
             this.GBSymulacja.Text = "Symulator";
@@ -91,16 +92,6 @@
             this.checkBox_symulacja.TabIndex = 6;
             this.checkBox_symulacja.Text = "stan symulacji";
             this.checkBox_symulacja.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(122, 203);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(94, 29);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button_stop_wydajnosc
             // 
@@ -142,6 +133,8 @@
             // 
             // groupBox_dane_serwera
             // 
+            this.groupBox_dane_serwera.Controls.Add(this.textBox_baza);
+            this.groupBox_dane_serwera.Controls.Add(this.label_Baza);
             this.groupBox_dane_serwera.Controls.Add(this.button_serwer_usun);
             this.groupBox_dane_serwera.Controls.Add(this.button_serwer_zapisz);
             this.groupBox_dane_serwera.Controls.Add(this.label_haslo_serwer);
@@ -155,14 +148,30 @@
             this.groupBox_dane_serwera.Controls.Add(this.textBox_serwer_nazwa);
             this.groupBox_dane_serwera.Location = new System.Drawing.Point(411, 12);
             this.groupBox_dane_serwera.Name = "groupBox_dane_serwera";
-            this.groupBox_dane_serwera.Size = new System.Drawing.Size(495, 426);
+            this.groupBox_dane_serwera.Size = new System.Drawing.Size(495, 357);
             this.groupBox_dane_serwera.TabIndex = 5;
             this.groupBox_dane_serwera.TabStop = false;
             this.groupBox_dane_serwera.Text = "Dane serwera";
             // 
+            // textBox_baza
+            // 
+            this.textBox_baza.Location = new System.Drawing.Point(125, 193);
+            this.textBox_baza.Name = "textBox_baza";
+            this.textBox_baza.Size = new System.Drawing.Size(364, 27);
+            this.textBox_baza.TabIndex = 12;
+            // 
+            // label_Baza
+            // 
+            this.label_Baza.AutoSize = true;
+            this.label_Baza.Location = new System.Drawing.Point(13, 193);
+            this.label_Baza.Name = "label_Baza";
+            this.label_Baza.Size = new System.Drawing.Size(41, 20);
+            this.label_Baza.TabIndex = 11;
+            this.label_Baza.Text = "Baza";
+            // 
             // button_serwer_usun
             // 
-            this.button_serwer_usun.Location = new System.Drawing.Point(16, 193);
+            this.button_serwer_usun.Location = new System.Drawing.Point(16, 235);
             this.button_serwer_usun.Name = "button_serwer_usun";
             this.button_serwer_usun.Size = new System.Drawing.Size(240, 29);
             this.button_serwer_usun.TabIndex = 10;
@@ -172,7 +181,7 @@
             // 
             // button_serwer_zapisz
             // 
-            this.button_serwer_zapisz.Location = new System.Drawing.Point(262, 193);
+            this.button_serwer_zapisz.Location = new System.Drawing.Point(262, 234);
             this.button_serwer_zapisz.Name = "button_serwer_zapisz";
             this.button_serwer_zapisz.Size = new System.Drawing.Size(228, 29);
             this.button_serwer_zapisz.TabIndex = 9;
@@ -254,11 +263,16 @@
             this.textBox_serwer_nazwa.Size = new System.Drawing.Size(365, 27);
             this.textBox_serwer_nazwa.TabIndex = 0;
             // 
+            // timer_Symulacja
+            // 
+            this.timer_Symulacja.Interval = 10000;
+            this.timer_Symulacja.Tick += new System.EventHandler(this.timer_Symulacja_Tick);
+            // 
             // Symulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(962, 714);
+            this.ClientSize = new System.Drawing.Size(928, 421);
             this.Controls.Add(this.groupBox_dane_serwera);
             this.Controls.Add(this.GBSymulacja);
             this.Name = "Symulator";
@@ -283,7 +297,6 @@
         private System.Windows.Forms.HScrollBar hScrollBar_wydajnosc;
         private System.Windows.Forms.GroupBox groupBox_dane_serwera;
         private System.Windows.Forms.BindingSource bindingSource1;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label_haslo_serwer;
         private System.Windows.Forms.Label label_login_serwer;
         private System.Windows.Forms.Label label_adres_serwera;
@@ -296,6 +309,9 @@
         private System.Windows.Forms.Button button_serwer_usun;
         private System.Windows.Forms.Button button_serwer_zapisz;
         private System.Windows.Forms.CheckBox checkBox_symulacja;
+        private System.Windows.Forms.Timer timer_Symulacja;
+        private System.Windows.Forms.TextBox textBox_baza;
+        private System.Windows.Forms.Label label_Baza;
     }
 }
 
