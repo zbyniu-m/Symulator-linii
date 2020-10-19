@@ -7,9 +7,9 @@ using SymulatroLinii.Model;
 
 namespace SymulatroLinii.Migrations
 {
-    [DbContext(typeof(DbSerwerSQLite.BloggingContext))]
-    [Migration("20201019061534_InitialCreate")]
-    partial class InitialCreate
+    [DbContext(typeof(DbSerwerSQLite.DbSerwerContext))]
+    [Migration("20201019085416_Create")]
+    partial class Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

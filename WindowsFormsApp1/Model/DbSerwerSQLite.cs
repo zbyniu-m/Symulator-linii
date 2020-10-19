@@ -6,14 +6,14 @@ using System.Text;
 
 namespace SymulatroLinii.Model
 {
-    class DbSerwerSQLite
+    public class DbSerwerSQLite
     {
         public class DbSerwerContext : DbContext
     {
         public DbSet<DbSerwer> DbSerwers { get; set; }  
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=myBase.db");
+            => options.UseSqlite($"Filename=myBase.db");
     }
 
     public class DbSerwer

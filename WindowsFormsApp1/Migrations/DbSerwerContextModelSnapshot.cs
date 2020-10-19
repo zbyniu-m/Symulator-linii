@@ -6,8 +6,8 @@ using SymulatroLinii.Model;
 
 namespace SymulatroLinii.Migrations
 {
-    [DbContext(typeof(DbSerwerSQLite.BloggingContext))]
-    partial class BloggingContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(DbSerwerSQLite.DbSerwerContext))]
+    partial class DbSerwerContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {

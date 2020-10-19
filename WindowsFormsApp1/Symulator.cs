@@ -1,4 +1,6 @@
 ﻿using SymulatroLinii.Model;
+using SymulatroLinii.Repository;
+using SymulatroLinii.Repository.Irepository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static SymulatroLinii.Model.DbSerwerSQLite;
 
 namespace WindowsFormsApp1
 {
@@ -60,6 +63,93 @@ namespace WindowsFormsApp1
             else
                 button_start_symulator.Text = "Stop symulacji";
 
+        }
+
+        private void Symulator_Load(object sender, EventArgs e)
+        {
+
+            ZaczytajDaneDoComboboxa();
+        }
+
+        private void button_serwer_zapisz_Click(object sender, EventArgs e)
+        {
+            if(SerwerCzyNieMaPustychPol())
+            {
+                var daneSerwera = new DbSerwer();
+                daneSerwera.Nazwa = textBox_serwer_nazwa.Text;
+                daneSerwera.Adres = textBox_serwer_adres.Text;
+                daneSerwera.Login = textBox_serwer_login.Text;
+                daneSerwera.Haslo = textBox_serwer_haslo.Text;
+
+                using (DbSerwerSQLiteRepository sqlite = new DbSerwerSQLiteRepository())
+                {
+                     sqlite.Insert(daneSerwera);             
+
+                }
+                
+                ZaczytajDaneDoComboboxa();
+            }
+        }
+
+        bool SerwerCzyNieMaPustychPol()
+        {
+            var result = false;
+            if (textBox_serwer_nazwa.Text != "" && textBox_serwer_adres.Text != "" && textBox_serwer_login.Text !="" && textBox_serwer_haslo.Text !="" )
+            {
+                result = true;
+            }
+            return result;
+        }
+
+        private void ZaczytajDaneDoComboboxa()
+        {
+            comboBox_serwer.Items.Clear();
+            using (DbSerwerSQLiteRepository sqlite = new DbSerwerSQLiteRepository())
+            {
+                var nazwy = sqlite.GetAllColumnNazwa();
+                foreach (string nazwa in nazwy)
+                {
+                    comboBox_serwer.Items.Add(nazwa);
+                }
+
+            }
+        }
+
+        private void button_serwer_usun_Click(object sender, EventArgs e)
+        {
+            using (DbSerwerSQLiteRepository sqlite = new DbSerwerSQLiteRepository())
+            {
+                sqlite.Delete(comboBox_serwer.Text);
+                ZaczytajDaneDoComboboxa();
+                wyczyscPolaDaneSerwera();
+            }
+        }
+
+        private void comboBox_serwer_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var daneSerwera = new DbSerwer();
+            using (DbSerwerSQLiteRepository sqlite = new DbSerwerSQLiteRepository())
+            {                
+                daneSerwera= sqlite.GetDbSerwer(comboBox_serwer.Text);
+            }
+            if(daneSerwera != null) { 
+            textBox_serwer_adres.Text = daneSerwera.Adres;
+            textBox_serwer_haslo.Text = daneSerwera.Haslo;
+            textBox_serwer_nazwa.Text = daneSerwera.Nazwa;
+            textBox_serwer_login.Text = daneSerwera.Login;
+            }
+            else
+            {
+                wyczyscPolaDaneSerwera();
+            }
+        }
+        private void wyczyscPolaDaneSerwera()
+        {
+            textBox_serwer_adres.Text = "";
+            textBox_serwer_haslo.Text = "";
+            textBox_serwer_nazwa.Text = "";
+            textBox_serwer_login.Text = "";
+            comboBox_serwer.Text = "";
         }
     }
 }

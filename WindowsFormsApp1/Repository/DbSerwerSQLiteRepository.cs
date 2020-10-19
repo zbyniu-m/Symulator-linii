@@ -1,6 +1,9 @@
-﻿using SymulatroLinii.Repository.Irepository;
+﻿using Microsoft.EntityFrameworkCore;
+using SymulatroLinii.Repository;
+using SymulatroLinii.Repository.Irepository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using static SymulatroLinii.Model.DbSerwerSQLite;
 
@@ -8,28 +11,99 @@ namespace SymulatroLinii.Repository
 {
     public class DbSerwerSQLiteRepository : IDbSerwerSQLiteRepository
     {
-        DbSerwerContext db = new DbSerwerContext();
-
+        
         public void Delete(string Nazwa)
         {
-            db.Remove(Nazwa);
+            using (DbSerwerContext db = new DbSerwerContext())
+            {
+
+                var ObjFromDb = db.DbSerwers.FirstOrDefault(Q => Q.Nazwa == Nazwa);
+                if (ObjFromDb != null)
+                {
+                    db.DbSerwers.Remove(ObjFromDb);
+                    db.SaveChanges();
+                }                
+            }
         }
 
         public void Dispose()
         {
-            db.Dispose();
+            using (DbSerwerContext db = new DbSerwerContext())
+            {
+                db.Dispose();
+            }
         }
 
         public List<DbSerwer> GetAll()
         {
-            throw new NotImplementedException();
+            List<DbSerwer> lists = new List<DbSerwer>();
+            using (DbSerwerContext db = new DbSerwerContext())
+            {                
+                lists = db.DbSerwers.ToList();
+            }
+            return lists;
         }
 
-        public void Insert()
+        public List<string> GetAllColumnNazwa()
         {
-            throw new NotImplementedException();
+            var nazwa = new List<string>();
+            //nazwa.Add("dodaj nowy");
+            using (DbSerwerContext db = new DbSerwerContext())
+            {
+                db.Database.Migrate();
+                System.Diagnostics.Debug.WriteLine(db.Database.ProviderName);
+                int ilosc = db.DbSerwers.Select(c => c.Nazwa).Count();
+                if (ilosc > 0) { 
+                nazwa = db.DbSerwers
+                    .Select(c => c.Nazwa)
+                    .ToList();
+                }
+            }
+            return nazwa;
         }
 
-   
+        public bool Insert(DbSerwer entity)
+        {
+            bool result = false;
+            try
+            {
+                using(DbSerwerContext db = new DbSerwerContext())
+                {
+                    var ObjFromDb = db.DbSerwers.FirstOrDefault(Q => Q.Nazwa == entity.Nazwa);
+                    if (ObjFromDb != null)
+                    {
+                        ObjFromDb.Nazwa = entity.Nazwa;
+                        ObjFromDb.Login = entity.Login;
+                        ObjFromDb.Adres = entity.Adres;
+                        ObjFromDb.Haslo = entity.Haslo;
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        db.Add(entity);
+                        db.SaveChanges();
+                        result = true;
+                    }
+              
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }            
+            
+            return result;
+        }
+
+        public DbSerwer GetDbSerwer(string nazwa)
+        {
+            var daneSerwera = new DbSerwer();
+            using (DbSerwerContext db = new DbSerwerContext())
+            {
+                 daneSerwera = db.DbSerwers.FirstOrDefault(q => q.Nazwa == nazwa);
+            }
+            return daneSerwera;
+        }
+     
     }
 }

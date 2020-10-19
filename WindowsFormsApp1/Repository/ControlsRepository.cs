@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WindowsFormsApp1;
 
 namespace SymulatroLinii.Repository
 {
-    class ControlsRepository
+    public class ControlsRepository
     {
-        
+       
     }
 }

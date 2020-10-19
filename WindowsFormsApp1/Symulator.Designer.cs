@@ -155,7 +155,7 @@
             this.groupBox_dane_serwera.Controls.Add(this.textBox_serwer_nazwa);
             this.groupBox_dane_serwera.Location = new System.Drawing.Point(411, 12);
             this.groupBox_dane_serwera.Name = "groupBox_dane_serwera";
-            this.groupBox_dane_serwera.Size = new System.Drawing.Size(733, 426);
+            this.groupBox_dane_serwera.Size = new System.Drawing.Size(495, 426);
             this.groupBox_dane_serwera.TabIndex = 5;
             this.groupBox_dane_serwera.TabStop = false;
             this.groupBox_dane_serwera.Text = "Dane serwera";
@@ -168,6 +168,7 @@
             this.button_serwer_usun.TabIndex = 10;
             this.button_serwer_usun.Text = "Usuń";
             this.button_serwer_usun.UseVisualStyleBackColor = true;
+            this.button_serwer_usun.Click += new System.EventHandler(this.button_serwer_usun_Click);
             // 
             // button_serwer_zapisz
             // 
@@ -177,6 +178,7 @@
             this.button_serwer_zapisz.TabIndex = 9;
             this.button_serwer_zapisz.Text = "Zapisz";
             this.button_serwer_zapisz.UseVisualStyleBackColor = true;
+            this.button_serwer_zapisz.Click += new System.EventHandler(this.button_serwer_zapisz_Click);
             // 
             // label_haslo_serwer
             // 
@@ -221,11 +223,13 @@
             this.comboBox_serwer.Name = "comboBox_serwer";
             this.comboBox_serwer.Size = new System.Drawing.Size(484, 28);
             this.comboBox_serwer.TabIndex = 4;
+            this.comboBox_serwer.SelectedIndexChanged += new System.EventHandler(this.comboBox_serwer_SelectedIndexChanged);
             // 
             // textBox_serwer_haslo
             // 
             this.textBox_serwer_haslo.Location = new System.Drawing.Point(125, 160);
             this.textBox_serwer_haslo.Name = "textBox_serwer_haslo";
+            this.textBox_serwer_haslo.PasswordChar = '*';
             this.textBox_serwer_haslo.Size = new System.Drawing.Size(365, 27);
             this.textBox_serwer_haslo.TabIndex = 3;
             // 
@@ -254,11 +258,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(949, 530);
+            this.ClientSize = new System.Drawing.Size(962, 714);
             this.Controls.Add(this.groupBox_dane_serwera);
             this.Controls.Add(this.GBSymulacja);
             this.Name = "Symulator";
             this.Text = "Symulator ";
+            this.Load += new System.EventHandler(this.Symulator_Load);
             this.GBSymulacja.ResumeLayout(false);
             this.GBSymulacja.PerformLayout();
             this.groupBox_dane_serwera.ResumeLayout(false);
