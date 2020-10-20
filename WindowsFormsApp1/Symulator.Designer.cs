@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.button_start_symulator = new System.Windows.Forms.Button();
             this.GBSymulacja = new System.Windows.Forms.GroupBox();
+            this.richTextBox_info = new System.Windows.Forms.RichTextBox();
             this.textBox_licznik = new System.Windows.Forms.TextBox();
             this.button_licznik_reset = new System.Windows.Forms.Button();
             this.checkBox_symulacja = new System.Windows.Forms.CheckBox();
@@ -39,6 +40,7 @@
             this.textBox_wydajnosc = new System.Windows.Forms.TextBox();
             this.hScrollBar_wydajnosc = new System.Windows.Forms.HScrollBar();
             this.groupBox_dane_serwera = new System.Windows.Forms.GroupBox();
+            this.richTextBox_informacje = new System.Windows.Forms.RichTextBox();
             this.textBox_baza = new System.Windows.Forms.TextBox();
             this.label_Baza = new System.Windows.Forms.Label();
             this.button_serwer_usun = new System.Windows.Forms.Button();
@@ -72,6 +74,7 @@
             // 
             // GBSymulacja
             // 
+            this.GBSymulacja.Controls.Add(this.richTextBox_info);
             this.GBSymulacja.Controls.Add(this.textBox_licznik);
             this.GBSymulacja.Controls.Add(this.button_licznik_reset);
             this.GBSymulacja.Controls.Add(this.checkBox_symulacja);
@@ -86,6 +89,15 @@
             this.GBSymulacja.TabIndex = 1;
             this.GBSymulacja.TabStop = false;
             this.GBSymulacja.Text = "Symulator";
+            // 
+            // richTextBox_info
+            // 
+            this.richTextBox_info.Location = new System.Drawing.Point(7, 224);
+            this.richTextBox_info.Name = "richTextBox_info";
+            this.richTextBox_info.ReadOnly = true;
+            this.richTextBox_info.Size = new System.Drawing.Size(383, 120);
+            this.richTextBox_info.TabIndex = 9;
+            this.richTextBox_info.Text = "";
             // 
             // textBox_licznik
             // 
@@ -142,9 +154,9 @@
             // textBox_wydajnosc
             // 
             this.textBox_wydajnosc.Enabled = false;
-            this.textBox_wydajnosc.Location = new System.Drawing.Point(0, 123);
+            this.textBox_wydajnosc.Location = new System.Drawing.Point(7, 123);
             this.textBox_wydajnosc.Name = "textBox_wydajnosc";
-            this.textBox_wydajnosc.Size = new System.Drawing.Size(392, 27);
+            this.textBox_wydajnosc.Size = new System.Drawing.Size(385, 27);
             this.textBox_wydajnosc.TabIndex = 2;
             // 
             // hScrollBar_wydajnosc
@@ -162,6 +174,7 @@
             // 
             // groupBox_dane_serwera
             // 
+            this.groupBox_dane_serwera.Controls.Add(this.richTextBox_informacje);
             this.groupBox_dane_serwera.Controls.Add(this.textBox_baza);
             this.groupBox_dane_serwera.Controls.Add(this.label_Baza);
             this.groupBox_dane_serwera.Controls.Add(this.button_serwer_usun);
@@ -181,6 +194,16 @@
             this.groupBox_dane_serwera.TabIndex = 5;
             this.groupBox_dane_serwera.TabStop = false;
             this.groupBox_dane_serwera.Text = "Dane serwera";
+            // 
+            // richTextBox_informacje
+            // 
+            this.richTextBox_informacje.Enabled = false;
+            this.richTextBox_informacje.Location = new System.Drawing.Point(17, 271);
+            this.richTextBox_informacje.Name = "richTextBox_informacje";
+            this.richTextBox_informacje.ReadOnly = true;
+            this.richTextBox_informacje.Size = new System.Drawing.Size(472, 80);
+            this.richTextBox_informacje.TabIndex = 13;
+            this.richTextBox_informacje.Text = "";
             // 
             // textBox_baza
             // 
@@ -309,6 +332,7 @@
             this.ClientSize = new System.Drawing.Size(928, 421);
             this.Controls.Add(this.groupBox_dane_serwera);
             this.Controls.Add(this.GBSymulacja);
+            this.MaximizeBox = false;
             this.Name = "Symulator";
             this.Text = "Symulator ";
             this.Load += new System.EventHandler(this.Symulator_Load);
@@ -349,6 +373,8 @@
         private System.Windows.Forms.TextBox textBox_licznik;
         private System.Windows.Forms.Button button_licznik_reset;
         private System.Windows.Forms.Timer timer_Licznik;
+        private System.Windows.Forms.RichTextBox richTextBox_info;
+        private System.Windows.Forms.RichTextBox richTextBox_informacje;
     }
 }
 

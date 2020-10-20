@@ -28,6 +28,8 @@ namespace WindowsFormsApp1
             textBox_wydajnosc.DataBindings.Add("Text", _dbTempTable, "Wydajnosc", true, DataSourceUpdateMode.OnPropertyChanged);
             hScrollBar_wydajnosc.DataBindings.Add("Value", _dbTempTable, "Wydajnosc", true, DataSourceUpdateMode.OnPropertyChanged);
             textBox_licznik.DataBindings.Add("Text", _dbTempTable, "L_Opakowan", true, DataSourceUpdateMode.OnPropertyChanged);
+
+            richTextBox_informacje.Text = "Numer linii: " + _dbTempTable.Nr_lini.ToString();
         }
 
         private void button_start_wydajnosc_Click(object sender, EventArgs e)
@@ -279,11 +281,21 @@ namespace WindowsFormsApp1
 
                 Debug.WriteLine(query + " " + connetionString);
                 cnn.Close();
+                SprawdzDlugoscRichTextBox_info();
+                richTextBox_info.Text = _dbTempTable.Time_Stamp.ToString("yyyy-MM-dd hh:mm:ss") + " zapis do bazy: "+ _dbTempTable.Wydajnosc.ToString() + " " + _dbTempTable.L_Opakowan.ToString() + " "+ _dbTempTable.FilRun.ToString() + " " + "\r\n" + richTextBox_info.Text;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Nie udana próba połączenia z bazą ! " + ex.Message);
+                SprawdzDlugoscRichTextBox_info();
+                richTextBox_info.Text = _dbTempTable.Time_Stamp.ToString("rrrr-MM-dd hh:mm:ss") + " błąd zapisu: " + ex.Message + "\r\n" + richTextBox_info.Text;
             }
+        }
+
+        private void SprawdzDlugoscRichTextBox_info()
+        {
+            if (richTextBox_info.Text.Length > 2000000)
+                richTextBox_info.Text = "";
         }
 
         private void button_licznik_reset_Click(object sender, EventArgs e)
