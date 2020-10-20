@@ -27,22 +27,40 @@ namespace WindowsFormsApp1
             checkBox_symulacja.DataBindings.Add("Checked", _zmienne, "symulacjaONOFF", true, DataSourceUpdateMode.OnPropertyChanged);
             textBox_wydajnosc.DataBindings.Add("Text", _dbTempTable, "Wydajnosc", true, DataSourceUpdateMode.OnPropertyChanged);
             hScrollBar_wydajnosc.DataBindings.Add("Value", _dbTempTable, "Wydajnosc", true, DataSourceUpdateMode.OnPropertyChanged);
+            textBox_licznik.DataBindings.Add("Text", _dbTempTable, "L_Opakowan", true, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void button_start_wydajnosc_Click(object sender, EventArgs e)
         {
             int maxWydajnosc = hScrollBar_wydajnosc.Maximum - hScrollBar_wydajnosc.LargeChange;
             textBox_wydajnosc.Text = maxWydajnosc.ToString();
+            ZmienStanLicznika();
+
         }
 
         private void button_stop_wydajnosc_Click(object sender, EventArgs e)
         {            
             textBox_wydajnosc.Text = hScrollBar_wydajnosc.Minimum.ToString();
+            ZmienStanLicznika();
+
         }
 
         private void hScrollBar_wydajnosc_Scroll(object sender, ScrollEventArgs e)
         {
-            _dbTempTable.Wydajnosc = hScrollBar_wydajnosc.Value;            
+            _dbTempTable.Wydajnosc = hScrollBar_wydajnosc.Value;
+            ZmienStanLicznika();
+        }
+
+        private void ZmienStanLicznika()
+        {
+            if (_dbTempTable.Wydajnosc > 0)
+            {
+                timer_Licznik.Start();
+            }
+            else
+            {
+                timer_Licznik.Stop();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -60,19 +78,40 @@ namespace WindowsFormsApp1
 
         private void button_start_symulator_Click(object sender, EventArgs e)
         {
+            if(SerwerCzyNieMaPustychPol())
+            { 
             checkBox_symulacja.Checked = !checkBox_symulacja.Checked;
             if (!checkBox_symulacja.Checked)
             { 
                 button_start_symulator.Text = "Start symulacji";
                 timer_Symulacja.Stop();
                 UstawPolaNaAktywne();
-            }
+                PolaSymulatoraDostepne(false);
+                timer_Licznik.Stop();
+                textBox_wydajnosc.Text = 0.ToString();
+                textBox_licznik.Text = 0.ToString();
+                }
             else
             { 
                 button_start_symulator.Text = "Stop symulacji";
                 timer_Symulacja.Start();
                 UstawPolaNaNieaktywne();
+                PolaSymulatoraDostepne(true);
             }
+            }
+            else
+            {
+                MessageBox.Show("Nie ustawiono parametrów serwera.","Uwaga");
+            }
+
+        }
+
+        private void PolaSymulatoraDostepne(bool dostepnosc)
+        {
+            button_start_wydajnosc.Enabled = dostepnosc;
+            button_stop_wydajnosc.Enabled = dostepnosc;            
+            button_licznik_reset.Enabled = dostepnosc;
+            hScrollBar_wydajnosc.Enabled = dostepnosc;
 
         }
 
@@ -117,14 +156,22 @@ namespace WindowsFormsApp1
                 daneSerwera.Login = textBox_serwer_login.Text;
                 daneSerwera.Haslo = textBox_serwer_haslo.Text;
                 daneSerwera.Baza = textBox_baza.Text;
-
-                using (DbSerwerSQLiteRepository sqlite = new DbSerwerSQLiteRepository())
+                try
                 {
-                     sqlite.Insert(daneSerwera);             
+                    using (DbSerwerSQLiteRepository sqlite = new DbSerwerSQLiteRepository())
+                    {
+                        sqlite.Insert(daneSerwera);
 
+                    }
+                    ZaczytajDaneDoComboboxa();
+                    MessageBox.Show("Ustawienia zostały zapisane.", "Zapis", MessageBoxButtons.OK, MessageBoxIcon.Information);                   
                 }
+                catch (Exception)
+                {
+
+                    MessageBox.Show("Operacja zakończyła się niepowodzeniem.", "Zapis", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }         
                 
-                ZaczytajDaneDoComboboxa();
             }
         }
 
@@ -154,12 +201,17 @@ namespace WindowsFormsApp1
 
         private void button_serwer_usun_Click(object sender, EventArgs e)
         {
+            var msgbox = MessageBox.Show("Czy potwierdzasz usunięcie " + comboBox_serwer.Text + " z lity ?", "Usuwanie", MessageBoxButtons.YesNo, MessageBoxIcon.Question); 
+            if (msgbox == DialogResult.Yes)
+            { 
             using (DbSerwerSQLiteRepository sqlite = new DbSerwerSQLiteRepository())
             {
                 sqlite.Delete(comboBox_serwer.Text);
                 ZaczytajDaneDoComboboxa();
                 wyczyscPolaDaneSerwera();
             }
+            }
+
         }
 
         private void comboBox_serwer_SelectedIndexChanged(object sender, EventArgs e)
@@ -193,10 +245,10 @@ namespace WindowsFormsApp1
 
         private void timer_Symulacja_Tick(object sender, EventArgs e)
         {
-            
+            _dbTempTable.Time_Stamp = DateTime.Now;
             SqlConnection cnn;
             string connetionString = "Data Source=" + textBox_serwer_adres.Text + ";Initial Catalog="+ textBox_baza.Text +";User ID=" + textBox_serwer_login.Text + "; Password=" + textBox_serwer_haslo.Text;
-            string query = @"INSERT INTO temp (Time_Stamp,L_Opakowan,Wydajnosc,L_OpAplikator,WydajnoscAplikator,FilTrybCIP,FilRezerwa1,FilRezerwa2,FilRezerwa3,FilSterylizacja,FilReadyProd,FilRun,FilRezerwa4,ErrorCode1,ErrorCode2,Nr_lini,Bias,czy_przetworzony,Time_Stamp_ms) VALUES (@Time_Stamp,@L_Opakowan,@Wydajnosc,@L_OpAplikator,@WydajnoscAplikator,@FilTrybCIP,@FilRezerwa1,@FilRezerwa2,@FilRezerwa3,@FilSterylizacja,@FilReadyProd,@FilRun,@FilRezerwa4,@ErrorCode1,@ErrorCode2,@Nr_lini,@Bias,0,@Time_Stamp_ms)";
+            string query = @"INSERT INTO temp (Time_Stamp,L_Opakowan,Wydajnosc,L_OpAplikator,WydajnoscAplikator,FilTrybCIP,FilRezerwa1,FilRezerwa2,FilRezerwa3,FilSterylizacja,FilReadyProd,FilRun,FilRezerwa4,ErrorCode1,ErrorCode2,Nr_lini,Bias,Time_Stamp_ms) VALUES (@Time_Stamp,@L_Opakowan,@Wydajnosc,@L_OpAplikator,@WydajnoscAplikator,@FilTrybCIP,@FilRezerwa1,@FilRezerwa2,@FilRezerwa3,@FilSterylizacja,@FilReadyProd,@FilRun,@FilRezerwa4,@ErrorCode1,@ErrorCode2,@Nr_lini,@Bias,@Time_Stamp_ms)";
                 Debug.WriteLine(connetionString + " " + query);
             var parameter = new DynamicParameters();
             parameter.Add("@Time_Stamp", _dbTempTable.Time_Stamp);
@@ -232,6 +284,17 @@ namespace WindowsFormsApp1
             {
                 MessageBox.Show("Nie udana próba połączenia z bazą ! " + ex.Message);
             }
+        }
+
+        private void button_licznik_reset_Click(object sender, EventArgs e)
+        {
+            textBox_licznik.Text = 0.ToString();
+        }
+
+        private void timer_Licznik_Tick(object sender, EventArgs e)
+        {
+            _dbTempTable.L_Opakowan = _dbTempTable.L_Opakowan + (int)(_dbTempTable.Wydajnosc / 3600);
+            textBox_licznik.Text = _dbTempTable.L_Opakowan.ToString();
         }
     }
 }

@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.button_start_symulator = new System.Windows.Forms.Button();
             this.GBSymulacja = new System.Windows.Forms.GroupBox();
+            this.textBox_licznik = new System.Windows.Forms.TextBox();
+            this.button_licznik_reset = new System.Windows.Forms.Button();
             this.checkBox_symulacja = new System.Windows.Forms.CheckBox();
             this.button_stop_wydajnosc = new System.Windows.Forms.Button();
             this.button_start_wydajnosc = new System.Windows.Forms.Button();
@@ -52,6 +54,7 @@
             this.textBox_serwer_nazwa = new System.Windows.Forms.TextBox();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.timer_Symulacja = new System.Windows.Forms.Timer(this.components);
+            this.timer_Licznik = new System.Windows.Forms.Timer(this.components);
             this.GBSymulacja.SuspendLayout();
             this.groupBox_dane_serwera.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -69,6 +72,8 @@
             // 
             // GBSymulacja
             // 
+            this.GBSymulacja.Controls.Add(this.textBox_licznik);
+            this.GBSymulacja.Controls.Add(this.button_licznik_reset);
             this.GBSymulacja.Controls.Add(this.checkBox_symulacja);
             this.GBSymulacja.Controls.Add(this.button_stop_wydajnosc);
             this.GBSymulacja.Controls.Add(this.button_start_wydajnosc);
@@ -81,6 +86,25 @@
             this.GBSymulacja.TabIndex = 1;
             this.GBSymulacja.TabStop = false;
             this.GBSymulacja.Text = "Symulator";
+            // 
+            // textBox_licznik
+            // 
+            this.textBox_licznik.Enabled = false;
+            this.textBox_licznik.Location = new System.Drawing.Point(6, 190);
+            this.textBox_licznik.Name = "textBox_licznik";
+            this.textBox_licznik.Size = new System.Drawing.Size(188, 27);
+            this.textBox_licznik.TabIndex = 8;
+            // 
+            // button_licznik_reset
+            // 
+            this.button_licznik_reset.Enabled = false;
+            this.button_licznik_reset.Location = new System.Drawing.Point(200, 190);
+            this.button_licznik_reset.Name = "button_licznik_reset";
+            this.button_licznik_reset.Size = new System.Drawing.Size(190, 29);
+            this.button_licznik_reset.TabIndex = 7;
+            this.button_licznik_reset.Text = "Reset";
+            this.button_licznik_reset.UseVisualStyleBackColor = true;
+            this.button_licznik_reset.Click += new System.EventHandler(this.button_licznik_reset_Click);
             // 
             // checkBox_symulacja
             // 
@@ -95,6 +119,7 @@
             // 
             // button_stop_wydajnosc
             // 
+            this.button_stop_wydajnosc.Enabled = false;
             this.button_stop_wydajnosc.Location = new System.Drawing.Point(200, 88);
             this.button_stop_wydajnosc.Name = "button_stop_wydajnosc";
             this.button_stop_wydajnosc.Size = new System.Drawing.Size(190, 27);
@@ -105,6 +130,7 @@
             // 
             // button_start_wydajnosc
             // 
+            this.button_start_wydajnosc.Enabled = false;
             this.button_start_wydajnosc.Location = new System.Drawing.Point(6, 88);
             this.button_start_wydajnosc.Name = "button_start_wydajnosc";
             this.button_start_wydajnosc.Size = new System.Drawing.Size(190, 27);
@@ -115,6 +141,7 @@
             // 
             // textBox_wydajnosc
             // 
+            this.textBox_wydajnosc.Enabled = false;
             this.textBox_wydajnosc.Location = new System.Drawing.Point(0, 123);
             this.textBox_wydajnosc.Name = "textBox_wydajnosc";
             this.textBox_wydajnosc.Size = new System.Drawing.Size(392, 27);
@@ -122,11 +149,13 @@
             // 
             // hScrollBar_wydajnosc
             // 
-            this.hScrollBar_wydajnosc.LargeChange = 3000;
-            this.hScrollBar_wydajnosc.Location = new System.Drawing.Point(0, 153);
-            this.hScrollBar_wydajnosc.Maximum = 33000;
+            this.hScrollBar_wydajnosc.Enabled = false;
+            this.hScrollBar_wydajnosc.LargeChange = 3600;
+            this.hScrollBar_wydajnosc.Location = new System.Drawing.Point(1, 153);
+            this.hScrollBar_wydajnosc.Maximum = 33600;
             this.hScrollBar_wydajnosc.Name = "hScrollBar_wydajnosc";
             this.hScrollBar_wydajnosc.Size = new System.Drawing.Size(392, 24);
+            this.hScrollBar_wydajnosc.SmallChange = 3600;
             this.hScrollBar_wydajnosc.TabIndex = 1;
             this.hScrollBar_wydajnosc.Scroll += new System.Windows.Forms.ScrollEventHandler(this.hScrollBar_wydajnosc_Scroll);
             this.hScrollBar_wydajnosc.ValueChanged += new System.EventHandler(this.hScrollBar_wydajnosc_ValueChanged);
@@ -268,6 +297,11 @@
             this.timer_Symulacja.Interval = 10000;
             this.timer_Symulacja.Tick += new System.EventHandler(this.timer_Symulacja_Tick);
             // 
+            // timer_Licznik
+            // 
+            this.timer_Licznik.Interval = 1000;
+            this.timer_Licznik.Tick += new System.EventHandler(this.timer_Licznik_Tick);
+            // 
             // Symulator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
@@ -312,6 +346,9 @@
         private System.Windows.Forms.Timer timer_Symulacja;
         private System.Windows.Forms.TextBox textBox_baza;
         private System.Windows.Forms.Label label_Baza;
+        private System.Windows.Forms.TextBox textBox_licznik;
+        private System.Windows.Forms.Button button_licznik_reset;
+        private System.Windows.Forms.Timer timer_Licznik;
     }
 }
 
